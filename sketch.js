@@ -4,7 +4,7 @@ const MAP_NUM_COLS = 15;
 const WINDOW_WIDTH = MAP_NUM_COLS * TILE_SIZE;
 const WINDOW_HEIGHT = MAP_NUM_ROWS * TILE_SIZE;
 const FOV_ANGLE = 60 * (Math.PI / 180);
-const WALL_STRIP_WIDTH = 1;
+const WALL_STRIP_WIDTH = 25;
 const NUM_RAYS = WINDOW_WIDTH / WALL_STRIP_WIDTH;
 
 class Map {
@@ -105,8 +105,8 @@ class Ray {
 
     yintercept = Math.floor(player.y / TILE_SIZE) * TILE_SIZE;
     yintercept += this.isRayFacingDown ? TILE_SIZE : 0;
-    
     xintercept = player.x + ((yintercept - player.y) / Math.tan(this.rayAngle));
+
     // Compute steps
     ystep = TILE_SIZE;
     ystep *= this.isRayFacingUp ? -1 : 1;
@@ -117,12 +117,8 @@ class Ray {
     var nextHorizontalIntersectionX = xintercept;
     var nextHorizontalIntersectionY = yintercept;
 
-    if (this.isRayFacingUp) {
-      nextHorizontalIntersectionY--;
-    }
-
     while (nextHorizontalIntersectionX >= 0 && nextHorizontalIntersectionX <= WINDOW_WIDTH && nextHorizontalIntersectionY >= 0 && nextHorizontalIntersectionY <= WINDOW_HEIGHT) {
-      if (grid.hasWallAt(nextHorizontalIntersectionX, nextHorizontalIntersectionY)) {
+      if (grid.hasWallAt(nextHorizontalIntersectionX, nextHorizontalIntersectionY - (this.isRayFacingUp ? 1 : 0))) {
         foundHorizontalWallHit = true;
         horizontalWallHitX = nextHorizontalIntersectionX;
         horizontalWallHitY = nextHorizontalIntersectionY;
@@ -152,12 +148,9 @@ class Ray {
     var nextVerticalIntersectionX = xintercept;
     var nextVerticalIntersectionY = yintercept;
 
-    if (this.isRayFacingLeft) {
-      nextVerticalIntersectionX--;
-    }
-
     while (nextVerticalIntersectionX >= 0 && nextVerticalIntersectionX <= WINDOW_WIDTH && nextVerticalIntersectionY >= 0 && nextVerticalIntersectionY <= WINDOW_HEIGHT) {
-      if (grid.hasWallAt(nextVerticalIntersectionX, nextVerticalIntersectionY)) {
+      
+      if (grid.hasWallAt(nextVerticalIntersectionX - (this.isRayFacingLeft ? 1 : 0), nextVerticalIntersectionY)) {
         foundVerticalWallHit = true;
         verticalWallHitX = nextVerticalIntersectionX;
         verticalWallHitY = nextVerticalIntersectionY;
