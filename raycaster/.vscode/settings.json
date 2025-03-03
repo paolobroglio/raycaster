@@ -8,5 +8,11 @@
 		"**/*.o": true,
 		"**/*.exe": true,
 	},
-	"makefile.configureOnOpen": false
+	"makefile.configureOnOpen": false,
+	"files.associations": {
+		"new": "c",
+		"cstdlib": "c",
+		"locale": "c",
+		"ostream": "c"
+	}
 }
